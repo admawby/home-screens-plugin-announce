@@ -1,7 +1,7 @@
 {
   "id": "ha-announce",
   "name": "Announce",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Type a message on the display and have Home Assistant speak it on your speakers. Runs a script you choose (passing the message) or calls tts.speak directly, with one-tap preset messages.",
   "author": "admawby",
   "license": "MIT",

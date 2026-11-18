@@ -108,8 +108,24 @@ export async function sendAnnouncement(haUrl: string, call: ServiceCall): Promis
   }
 }
 
+/** The proxy answers a missing secret with a bare 500, so ask the host directly.
+ *  The endpoint reports which keys are set, never their values. */
+async function tokenMissing(): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/plugins/secrets/${encodeURIComponent(PLUGIN_ID)}`);
+    if (!res.ok) return false;
+    const { keys } = (await res.json()) as { keys?: Record<string, boolean> };
+    return keys?.ha_token !== true;
+  } catch {
+    return false;
+  }
+}
+
 async function errorMessage(res: Response): Promise<string> {
   if (res.status === 401) return 'Home Assistant rejected the token';
+  if (res.status === 500 && await tokenMissing()) {
+    return 'Add a Home Assistant token in this module\'s settings (Secrets)';
+  }
   if (res.status === 404) return 'Home Assistant has no such script or service';
   let detail = '';
   try {
