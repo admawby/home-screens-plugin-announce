@@ -1,0 +1,150 @@
+{
+  "id": "ha-announce",
+  "name": "Announce",
+  "version": "1.0.0",
+  "description": "Type a message on the display and have Home Assistant speak it on your speakers. Runs a script you choose (passing the message) or calls tts.speak directly, with one-tap preset messages.",
+  "author": "admawby",
+  "license": "MIT",
+  "minAppVersion": "1.8.0",
+  "moduleType": "ha-announce",
+  "category": "Personal",
+  "icon": "Volume2",
+
+  "defaultConfig": {
+    "title": "Announce",
+    "mode": "script",
+    "scriptEntity": "script.announcement",
+    "messageField": "message",
+    "ttsEntity": "tts.google_en_com",
+    "mediaPlayers": "",
+    "presets": "Dinner is ready!\nTime to leave in 5 minutes\nPlease come downstairs",
+    "placeholder": "Type an announcement…",
+    "showInput": true,
+    "clearAfterSend": true
+  },
+
+  "defaultSize": { "w": 520, "h": 300 },
+
+  "defaultStyle": {
+    "fontSize": 16,
+    "padding": 16,
+    "backgroundColor": "rgba(0, 0, 0, 0.35)",
+    "borderRadius": 16
+  },
+
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "Title",
+        "description": "Leave empty to hide the header.",
+        "ui:widget": "text",
+        "ui:group": "Content"
+      },
+      "presets": {
+        "type": "string",
+        "title": "Preset messages",
+        "description": "One per line. Each becomes a button that announces it straight away.",
+        "ui:widget": "textarea",
+        "ui:group": "Content"
+      },
+      "showInput": {
+        "type": "boolean",
+        "title": "Show text box",
+        "description": "Turn off for a presets-only panel.",
+        "ui:widget": "toggle",
+        "ui:group": "Content"
+      },
+      "placeholder": {
+        "type": "string",
+        "title": "Text box placeholder",
+        "ui:widget": "text",
+        "ui:group": "Content",
+        "ui:showWhen": { "field": "showInput", "equals": true }
+      },
+      "clearAfterSend": {
+        "type": "boolean",
+        "title": "Clear the text box after sending",
+        "ui:widget": "toggle",
+        "ui:group": "Content",
+        "ui:showWhen": { "field": "showInput", "equals": true }
+      },
+      "mode": {
+        "type": "string",
+        "title": "How to announce",
+        "enum": ["script", "tts"],
+        "enumLabels": ["Run a script (passes the message)", "Call tts.speak directly"],
+        "ui:widget": "select",
+        "ui:group": "Home Assistant"
+      },
+      "scriptEntity": {
+        "type": "string",
+        "title": "Script",
+        "description": "Script entity that takes the message as a field, e.g. script.announcement.",
+        "ui:widget": "text",
+        "ui:placeholder": "script.announcement",
+        "ui:group": "Home Assistant",
+        "ui:showWhen": { "field": "mode", "equals": "script" }
+      },
+      "messageField": {
+        "type": "string",
+        "title": "Message field name",
+        "description": "The script field that receives the text.",
+        "ui:widget": "text",
+        "ui:placeholder": "message",
+        "ui:group": "Home Assistant",
+        "ui:showWhen": { "field": "mode", "equals": "script" }
+      },
+      "ttsEntity": {
+        "type": "string",
+        "title": "TTS entity",
+        "ui:widget": "text",
+        "ui:placeholder": "tts.google_en_com",
+        "ui:group": "Home Assistant",
+        "ui:showWhen": { "field": "mode", "equals": "tts" }
+      },
+      "mediaPlayers": {
+        "type": "string",
+        "title": "Speakers",
+        "description": "Media player entities, separated by commas.",
+        "ui:widget": "text",
+        "ui:placeholder": "media_player.kitchen, media_player.bonus_room",
+        "ui:group": "Home Assistant",
+        "ui:showWhen": { "field": "mode", "equals": "tts" }
+      }
+    }
+  },
+
+  "settingsSchema": {
+    "type": "object",
+    "properties": {
+      "haUrl": {
+        "type": "string",
+        "title": "Home Assistant URL",
+        "description": "Leave empty to reuse the URL from the Home Assistant plugin, if it is installed.",
+        "ui:placeholder": "http://homeassistant.local:8123"
+      }
+    }
+  },
+
+  "secrets": [
+    {
+      "key": "ha_token",
+      "label": "Long-Lived Access Token",
+      "description": "Create one in Home Assistant at Profile → Security → Long-Lived Access Tokens.",
+      "required": true,
+      "placeholder": "eyJhbGciOiJIUzI1NiIs..."
+    }
+  ],
+
+  "allowedDomains": ["*"],
+
+  "exports": {
+    "component": "default"
+  },
+
+  "dataRequirements": [],
+  "prefetchUrl": null,
+  "permissions": ["network", "secrets", "localNetwork"]
+}

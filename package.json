@@ -1,0 +1,21 @@
+{
+  "name": "hs-plugin-ha-announce",
+  "version": "1.0.0",
+  "description": "Home Screens plugin: type or tap a message and Home Assistant speaks it",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite build && (vite build --watch & npx -y serve@latest . -l 5173 --cors --no-clipboard)",
+    "build": "vite build",
+    "test": "vitest run",
+    "package": "npm run build && rm -rf .pkg && mkdir -p .pkg/ha-announce/dist && cp manifest.json .pkg/ha-announce/ && cp dist/bundle.js dist/bundle.js.map .pkg/ha-announce/dist/ && tar -czf ha-announce.tar.gz -C .pkg ha-announce && rm -rf .pkg && sha256sum ha-announce.tar.gz"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0",
+    "vitest": "^4.1.10"
+  }
+}
